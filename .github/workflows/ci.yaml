@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{ github.GITHUB_EVENT_NAME }}
+      - run: echo ${{ github.event_name }}
       - uses: actions/checkout@v3
       - name: Use Node.js
         uses: actions/setup-node@v3
