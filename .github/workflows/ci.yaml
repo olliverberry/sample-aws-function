@@ -36,3 +36,4 @@ jobs:
         with:
           name: lambda-demo
           path: artifact
+      - run: echo $(ls -al artifact)
