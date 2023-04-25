@@ -25,6 +25,8 @@ jobs:
   
   deploy:
     if: ${{ github.ref == 'refs/heads/main' }}
+    needs:
+      - build
     environment: aws-ohio-development
     runs-on: ubuntu-latest
     steps:
