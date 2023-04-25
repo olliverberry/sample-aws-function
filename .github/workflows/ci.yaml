@@ -24,14 +24,6 @@ jobs:
           name: lambda-demo
           path: dist/index.zip
 
-      - name: Download Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: lambda-demo
-          path: artifact
-      
-      - run: echo $(ls -al artifact)
-  
   deploy:
     if: ${{ github.ref == 'refs/heads/main' }}
     needs:
