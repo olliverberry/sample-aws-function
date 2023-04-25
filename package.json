@@ -1,0 +1,22 @@
+{
+  "name": "sample-aws-function",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prebuild": "rm -rf dist",
+    "build": "esbuild src/index.ts --bundle --minify --sourcemap --platform=node --target=es2020 --outfile=dist/index.js",
+    "postbuild": "cd dist && zip -r index.zip index.js*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@work:stuartcmehrens/sample-aws-function.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.114",
+    "esbuild": "^0.17.18",
+    "typescript": "^5.0.4"
+  }
+}
