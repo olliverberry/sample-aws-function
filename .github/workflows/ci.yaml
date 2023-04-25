@@ -24,7 +24,8 @@ jobs:
           path: dist/index.zip
   
   deploy:
-    if: ${{ github.GITHUB_EVENT_NAME == 'push' }}
+    if: ${{ github.ref == 'refs/heads/main' }}
+    environment: aws-ohio-development
     runs-on: ubuntu-latest
     steps:
       - name: Use Node.js
@@ -36,4 +37,17 @@ jobs:
         with:
           name: lambda-demo
           path: artifact
-      - run: echo $(ls -al artifact)
+      - name: 'Configure AWS credentials'
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-session-name: github-aws
+      - name: Update Lambda Function
+        run: |
+          aws lambda update-function-code \
+          --function-name arn:aws:lambda:us-east-2:280540947342:function:sample-lambda \
+          --zip-file fileb://artifact/index.zip \
+          --no-cli-auto-prompt
+      - name: Install Datadog CI CLI
+        run: npm install -g @datadog/datadog-ci
