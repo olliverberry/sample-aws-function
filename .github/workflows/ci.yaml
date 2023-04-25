@@ -17,11 +17,20 @@ jobs:
           node-version: '18.x'
       - run: npm ci
       - run: npm run build --if-present
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
           name: lambda-demo
           path: dist/index.zip
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: lambda-demo
+          path: artifact
+      
+      - run: echo $(ls -al artifact)
   
   deploy:
     if: ${{ github.ref == 'refs/heads/main' }}
@@ -34,22 +43,26 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
+
       - name: Download Artifact
         uses: actions/download-artifact@v3
         with:
           name: lambda-demo
           path: artifact
+
       - name: 'Configure AWS credentials'
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: ${{ vars.AWS_REGION }}
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           role-session-name: github-aws
+
       - name: Update Lambda Function
         run: |
           aws lambda update-function-code \
           --function-name arn:aws:lambda:us-east-2:280540947342:function:sample-lambda \
           --zip-file fileb://artifact/index.zip \
           --no-cli-auto-prompt
+
       - name: Install Datadog CI CLI
         run: npm install -g @datadog/datadog-ci
