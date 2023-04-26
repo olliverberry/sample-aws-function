@@ -32,7 +32,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
-      contents: read
     steps:
       - name: Use Node.js
         uses: actions/setup-node@v3
@@ -49,8 +48,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-region: ${{ vars.AWS_REGION }}
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          role-session-name: github-aws
+          role-to-assume: ${{ vars.AWS_OIDC_ROLE_ARN }}
 
       - name: Update Lambda Function
         run: |
