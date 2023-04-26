@@ -61,3 +61,15 @@ jobs:
 
       - name: Install Datadog CI CLI
         run: npm install -g @datadog/datadog-ci
+
+      - name: Instrument Lambda Function
+        run: |
+          datadog-ci lambda instrument \
+          -f arn:aws:lambda:us-east-2:280540947342:function:sample-lambda \
+          --service datadog-demo-lambda \
+          --version 1.0.0 \
+          --env development \
+          --source-code-integration
+        env:
+          DATADOG_API_KEY_SECRET_ARN: ${{ secrets.DATADOG_API_KEY_SECRET_ARN }}
+          
