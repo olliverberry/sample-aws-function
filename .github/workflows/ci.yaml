@@ -69,7 +69,9 @@ jobs:
             --service datadog-demo-lambda \
             --version 1.0.0 \
             --env development \
-            --source-code-integration
+            --source-code-integration \
+            -v 90 \
+            -e 41
         env:
           DATADOG_API_KEY_SECRET_ARN: ${{ secrets.DATADOG_API_KEY_SECRET_ARN }}
           
